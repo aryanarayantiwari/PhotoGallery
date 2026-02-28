@@ -18,7 +18,7 @@ struct GalleryDetailView: View {
 
     var body: some View {
         VStack {
-            if !image.thumbnailUrl.isEmpty, let url = URL(string: "https://picsum.photos/\(image.id)/\(image.albumId)") {
+            if !image.thumbnailUrl.isEmpty, let url = URL(string: image.thumbnailUrl) {
                 KFImage(url)
                     .resizable()
                     .cacheOriginalImage()
