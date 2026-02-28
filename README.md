@@ -60,7 +60,7 @@ PhotoGallery/
 
 1. Clone the repository
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/aryanarayantiwari/PhotoGallery.git
    cd PhotoGallery
    ```
 2. Open `PhotoGallery.xcodeproj` in Xcode
