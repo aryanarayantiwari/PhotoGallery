@@ -46,6 +46,7 @@ class GalleryViewModel: ObservableObject {
 
             if !cached.isEmpty {
                 self.images = cached.map { $0.galleryImage }
+                currentPage = (images.count / pageLimit) + 1
                 isLoading = false
             } else {
                 try await fetchFromNetwork()
@@ -73,7 +74,9 @@ class GalleryViewModel: ObservableObject {
                 canLoadMore = false
             }
 
-            images.append(contentsOf: newImages)
+            let existingIDs = Set(images.map { $0.id })
+            let uniqueNew = newImages.filter { !existingIDs.contains($0.id) }
+            images.append(contentsOf: uniqueNew)
             currentPage += 1
 
             // Save to Core Data
