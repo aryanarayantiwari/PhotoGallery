@@ -10,7 +10,7 @@ import Foundation
 struct GalleryImage: Identifiable, Codable {
     let id: Int64
     let albumId: Int64
-    let title: String
+    var title: String
     let url: String
     let thumbnailUrl: String
 }

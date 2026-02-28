@@ -13,9 +13,14 @@ struct GalleryDetailView: View {
     let image: GalleryImage
     var body: some View {
         VStack {
-            if !image.thumbnailUrl.isEmpty, let url = URL(string: image.thumbnailUrl) {
-                KFImage(URL(string: "https://picsum.photos/\(Int.random(in: 0...500))")!)
+            if !image.thumbnailUrl.isEmpty, let url = URL(string: "https://picsum.photos/\(image.id)/\(image.albumId)") {
+                KFImage(url)
                     .resizable()
+                    .cacheOriginalImage()
+                    .retry(maxCount: 3)
+                    .placeholder {
+                        ProgressView()
+                    }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .clipShape(.rect(cornerRadius: 16))
             }
