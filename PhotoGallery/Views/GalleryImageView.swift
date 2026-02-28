@@ -12,7 +12,7 @@ struct GalleryImageView: View {
     let image: GalleryImage
     var body: some View {
         HStack {
-            if !image.thumbnailUrl.isEmpty, let url = URL(string: image.thumbnailUrl) {
+            if !image.thumbnailUrl.isEmpty, let url = URL(string: "https://picsum.photos/id/\(image.id)/200/200") {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
