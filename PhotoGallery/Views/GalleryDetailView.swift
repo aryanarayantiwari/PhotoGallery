@@ -10,7 +10,12 @@ import Kingfisher
 import SwiftUI
 
 struct GalleryDetailView: View {
+    @EnvironmentObject private var viewModel: GalleryViewModel
+    @Environment(\.dismiss) private var dismiss
     let image: GalleryImage
+    @State private var title = ""
+    @State private var showDeleteAlert = false
+
     var body: some View {
         VStack {
             if !image.thumbnailUrl.isEmpty, let url = URL(string: "https://picsum.photos/\(image.id)/\(image.albumId)") {
@@ -22,28 +27,49 @@ struct GalleryDetailView: View {
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .clipShape(.rect(cornerRadius: 16))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-            Text(image.title)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .multilineTextAlignment(.leading)
+            TextField("Title", text: $title)
+        }
+        .onAppear {
+            title = image.title
         }
         .safeAreaInset(edge: .bottom) {
-            Button {
-                
-            } label: {
-                Text("Delete")
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: 56, alignment: .bottom)
-                    .background(Color.accentColor)
-                    .foregroundStyle(.white)
-                    .clipShape(.rect(cornerRadius: 16))
+            VStack {
+                Button {
+                    viewModel.updateTitle(id: image.id, title: title)
+                    dismiss()
+                } label: {
+                    Text("Save")
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: 56, alignment: .bottom)
+                        .background(Color.primary)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
+                Button {
+                    showDeleteAlert = true
+                } label: {
+                    Text("Delete")
+                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: 56, alignment: .bottom)
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
             }
         }
         .padding()
-        .navigationTitle("Photo Gallery")
+        .navigationTitle(image.title)
+        .alert("Delete Photo", isPresented: $showDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteItem(id: image.id)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to delete this photo?")
+        }
     }
 }
 
